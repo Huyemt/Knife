@@ -29,7 +29,6 @@ int main(int argc, char* argv[]) {
         std::cout << R"(Please input code -> .\knife "expression")" << std::endl;
         return 0;
     }
-    //printIt(source.c_str());
     compileAsm(argv[1]);
     return 0;
 
