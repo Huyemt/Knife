@@ -6,7 +6,7 @@
 #ifndef KNIFE_ASSEMBLY_H
 #define KNIFE_ASSEMBLY_H
 
-#include "../AST.h"
+#include "front/AST.h"
 
 namespace Front {
 

@@ -4,7 +4,7 @@
  */
 
 #include "front/Parser.h"
-#include "front/generator/Assembly.h"
+#include "front/generator/x86/Assembly.h"
 #include <iostream>
 
 using namespace Front;

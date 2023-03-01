@@ -9,25 +9,20 @@
 
 namespace Front {
     void Assembly::goProgram(ProgramNode *node) {
-        printf("\t.text\n");
-#ifdef __linux__
-        printf("\t.globl prog\n");
-		printf("prog:\n")
-#else
-        // macos
-        printf("\t.globl _prog\n");
-        printf("_prog:\n");
-#endif // __linux__
+        printf("[bits 64]\n");
+        printf("[section .text]\n");
+        printf("global prog\n");
+        printf("prog:\n");
 
-        printf("\tpush %%rbp\n");
-        printf("\tmov %%rsp, %%rbp\n");
-        printf("\tsub $32, %%rsp\n");
+        printf("\tpush rbp\n");
+        printf("\tmov rsp, rbp\n");
+        printf("\tsub rsp, 32\n");
 
         node->left->Accept(this);
         assert(this->stackLevel == 0);
 
-        printf("\tmov %%rbp, %%rsp\n");
-        printf("\tpop %%rbp\n");
+        printf("\tmov rbp, rsp\n");
+        printf("\tpop rbp\n");
         printf("\tret\n");
     }
 
@@ -35,22 +30,22 @@ namespace Front {
         node->right->Accept(this);
         this->Push();
         node->left->Accept(this);
-        this->Pop("%rdi");
+        this->Pop("rdi");
 
         switch (node->anOperator)
         {
             case BinaryOperator::ADD:
-                printf("\tadd %%rdi, %%rax\n");
+                printf("\tadd rdi, rax\n");
                 break;
             case BinaryOperator::SUB:
-                printf("\tsub %%rdi, %%rax\n");
+                printf("\tsub rdi, rax\n");
                 break;
             case BinaryOperator::MUL:
-                printf("\timul %%rdi, %%rax\n");
+                printf("\timul rdi, rax\n");
                 break;
             case BinaryOperator::DIV:
                 printf("\tcqo\n");
-                printf("\tidiv %%rdi\n");
+                printf("\tidiv rdi\n");
                 break;
             default:
                 assert(0);
@@ -59,11 +54,11 @@ namespace Front {
     }
 
     void Assembly::goConstant(ConstantNode *node) {
-        printf("\tmov $%d, %%rax\n", node->value);
+        printf("\tmov rax, %d\n", node->value);
     }
 
     void Assembly::Push() {
-        printf("\tpush %%rax\n");
+        printf("\tpush rax\n");
         this->stackLevel++;
     }
 
