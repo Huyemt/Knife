@@ -68,6 +68,14 @@ namespace Front {
                 this->MakeToken(TokenType::DIV, "/");
                 this->position->Next();
                 break;
+            case '(':
+                this->MakeToken(TokenType::SLPAREN, "(");
+                this->position->Next();
+                break;
+            case ')':
+                this->MakeToken(TokenType::SRPAREN, ")");
+                this->position->Next();
+                break;
             default:
                 if (isdigit(this->position->currentChar)) {
                     this->NumberToken();

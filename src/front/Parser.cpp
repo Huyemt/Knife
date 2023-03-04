@@ -57,6 +57,13 @@ namespace Front {
     }
 
     std::shared_ptr<ASTNode> Parser::Primary() {
+        if (this->lexer.currentToken->type == TokenType::SLPAREN) {
+            this->lexer.Next();
+            auto node = this->Expression();
+            this->lexer.Next();
+            return node;
+        }
+
         auto node = std::make_shared<ConstantNode>();
         if (this->lexer.currentToken->type == TokenType::VT_NUMBER) {
             node->value = std::stoi(this->lexer.currentToken->value.data());
