@@ -9,3 +9,6 @@
 - [x] Linux
 - [x] MacOS
 - [ ] Windows（正在努力实现）
+## 开发环境
+ - CLion
+ - LLVM - Clang compiler

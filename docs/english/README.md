@@ -9,3 +9,6 @@ At present, the technology is not mature, so `Knife` belongs to compiled languag
 - [x] Linux
 - [x] MacOS
 - [ ] Windows（Working hard to support）
+## Development
+- CLion
+- LLVM - Clang compiler
