@@ -78,7 +78,7 @@ namespace Front {
          * 预期下一个词法单元类型，如果不符合，那么抛出错误
          * @param type
          */
-        void ExpectToken(TokenType type, const char* value);
+        void ExpectToken(TokenType type);
     private:
         /**
          * Judge whether the current character is a letter (including the underscore `_`)
@@ -98,8 +98,17 @@ namespace Front {
          * @return bool
          */
         bool IsLetterOrDigit();
+        /**
+         * Gets the tag value of a lexical unit
+         * 获取词法单元的标记值
+         * @param type
+         * @return string
+         */
+        static const char* GetSpelling(TokenType type);
+        char PeekChar(int count);
 
         void MakeToken(TokenType type, std::string_view value);
+        void MakeToken(TokenType type);
         void NumberToken();
         void IdentifierToken();
     };

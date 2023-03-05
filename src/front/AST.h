@@ -14,7 +14,13 @@ namespace Front {
         ADD,
         SUB,
         MUL,
-        DIV
+        DIV,
+        EQUAL,
+        NOT_EQUAL,
+        GREATER,
+        GREATER_OR_EQUAL,
+        LESSER,
+        LESSER_OR_EQUAL,
     };
     class Variable;
     class NodeVisitor;

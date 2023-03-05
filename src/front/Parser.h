@@ -23,6 +23,8 @@ namespace Front {
     private:
         std::shared_ptr<ASTNode> Statement();
         std::shared_ptr<ASTNode> Assgin();
+        std::shared_ptr<ASTNode> Equal();
+        std::shared_ptr<ASTNode> Relational();
         std::shared_ptr<ASTNode> Expression();
         std::shared_ptr<ASTNode> Term();
         std::shared_ptr<ASTNode> Factor();

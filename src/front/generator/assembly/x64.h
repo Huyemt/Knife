@@ -3,17 +3,17 @@
  * Time: 2023/2/27
  */
 
-#ifndef KNIFE_ASSEMBLY_H
-#define KNIFE_ASSEMBLY_H
+#ifndef KNIFE_X64_H
+#define KNIFE_X64_H
 
 #include "front/AST.h"
 
 namespace Front {
     /**
      * AT&T style
-     * x64 Assembly
+     * assembly x64
      */
-    class Assembly : public NodeVisitor {
+    class x64 : public NodeVisitor {
     public:
         void goProgram(ProgramNode *node) override;
     private:
@@ -30,4 +30,4 @@ namespace Front {
 
 } // Front
 
-#endif //KNIFE_ASSEMBLY_H
+#endif //KNIFE_X64_H

@@ -25,7 +25,7 @@ namespace Front {
         //  )
         SRPAREN,
         //  =
-        EQUAL,
+        ASSIGN,
         //  ;
         SEMICOLON,
         //  \0
@@ -43,6 +43,21 @@ namespace Front {
         MUL,
         //  /
         DIV,
+        //  ==
+        EQUAL,
+        //  !=
+        NOT_EQUAL,
+        //  >
+        GREATER,
+        //  >=
+        GREATER_OR_EQUAL,
+        //  <
+        LESSER,
+        //  =<
+        //  <=
+        LESSER_OR_EQUAL,
+
+
 
         /**
          * Const

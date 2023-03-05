@@ -4,7 +4,7 @@
  */
 
 #include "front/Parser.h"
-#include "front/generator/x64/Assembly.h"
+#include "front/generator/assembly/x64.h"
 #include <iostream>
 
 using namespace Front;
@@ -19,7 +19,7 @@ void compileAsm(std::string_view source) {
     Parser parser(lexer);
     auto ast = parser.Parse();
 
-    Assembly generator;
+    x64 generator;
     ast->Accept(&generator);
 }
 

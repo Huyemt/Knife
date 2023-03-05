@@ -4,7 +4,8 @@
  */
 
 #include "Parser.h"
-#include <cassert>
+#include "Lexer.h"
+#include "Diag.h"
 
 namespace Front {
     Parser::Parser(Lexer &lexer) : lexer(lexer) {
@@ -26,20 +27,56 @@ namespace Front {
     std::shared_ptr<ASTNode> Parser::Statement() {
         auto node = std::make_shared<StatementNode>();
         node->left = this->Expression();
-        assert(this->lexer.currentToken->type == TokenType::SEMICOLON);
-        this->lexer.Next();
+        this->lexer.ExpectToken(TokenType::SEMICOLON);
         return node;
     }
 
     std::shared_ptr<ASTNode> Parser::Assgin() {
-        auto left = this->Term();
+        auto left = this->Equal();
 
-        if (this->lexer.currentToken->type == TokenType::EQUAL) {
+        if (this->lexer.currentToken->type == TokenType::ASSIGN) {
             this->lexer.Next();
             auto node = std::make_shared<AssignNode>();
             node->left = left;
             node->right = this->Assgin();
             return node;
+        }
+
+        return left;
+    }
+
+    std::shared_ptr<ASTNode> Parser::Equal() {
+        auto left = this->Relational();
+        while (this->lexer.currentToken->type == TokenType::EQUAL || this->lexer.currentToken->type == TokenType::NOT_EQUAL) {
+            BinaryOperator anOperator = (this->lexer.currentToken->type == TokenType::EQUAL) ? BinaryOperator::EQUAL : BinaryOperator::NOT_EQUAL;
+            this->lexer.Next();
+            auto node = std::make_shared<BinaryNode>();
+            node->anOperator = anOperator;
+            node->left = left;
+            node->right = this->Relational();
+            left = node;
+        }
+
+        return left;
+    }
+
+    std::shared_ptr<ASTNode> Parser::Relational() {
+        auto left = this->Term();
+        while (this->lexer.currentToken->type == TokenType::GREATER || this->lexer.currentToken->type == TokenType::GREATER_OR_EQUAL || this->lexer.currentToken->type == TokenType::LESSER || this->lexer.currentToken->type == TokenType::LESSER_OR_EQUAL) {
+            BinaryOperator anOperator = BinaryOperator::GREATER;
+            if (this->lexer.currentToken->type == TokenType::GREATER_OR_EQUAL) {
+                anOperator = BinaryOperator::GREATER_OR_EQUAL;
+            } else if (this->lexer.currentToken->type == TokenType::LESSER) {
+                anOperator = BinaryOperator::LESSER;
+            } else if (this->lexer.currentToken->type == TokenType::LESSER_OR_EQUAL){
+                anOperator = BinaryOperator::LESSER_OR_EQUAL;
+            }
+            this->lexer.Next();
+            auto node = std::make_shared<BinaryNode>();
+            node->anOperator = anOperator;
+            node->left = left;
+            node->right = this->Term();
+            left = node;
         }
 
         return left;
@@ -89,7 +126,7 @@ namespace Front {
         if (this->lexer.currentToken->type == TokenType::SLPAREN) {
             this->lexer.Next();
             auto node = this->Expression();
-            this->lexer.ExpectToken(TokenType::SRPAREN, ")");
+            this->lexer.ExpectToken(TokenType::SRPAREN);
             return node;
         }
 
@@ -113,7 +150,8 @@ namespace Front {
             return node;
         }
 
-        //throw
+        DiagException(this->lexer.position, "not supported token");
+
         return nullptr;
 
     }
