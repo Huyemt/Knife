@@ -7,6 +7,7 @@
 #define KNIFE_AST_H
 
 #include <memory>
+#include <list>
 
 namespace Front {
     enum class BinaryOperator {
@@ -15,7 +16,9 @@ namespace Front {
         MUL,
         DIV
     };
+    class Variable;
     class NodeVisitor;
+
 
     /**
      * Abstract Syntax Tree Node
@@ -32,7 +35,20 @@ namespace Front {
      */
     class ProgramNode : public ASTNode {
     public:
+        std::list<std::shared_ptr<ASTNode>> statements;
+        std::list<std::shared_ptr<Variable>> variables;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    /**
+     * Statement Node
+     * 语句节点
+     */
+    class StatementNode : public ASTNode {
+    public:
         std::shared_ptr<ASTNode> left;
+
         void Accept(NodeVisitor* visitor) override;
     };
 
@@ -56,8 +72,35 @@ namespace Front {
     class ConstantNode : public ASTNode {
     public:
         int value{0};
+
         void Accept(NodeVisitor* visitor) override;
     };
+
+    /**
+     * Variable Node
+     * 变量节点
+     */
+    class VariableNode : public ASTNode {
+    public:
+        std::shared_ptr<Variable> variableObject;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    class AssignNode : public ASTNode {
+    public:
+        std::shared_ptr<ASTNode> left;
+        std::shared_ptr<ASTNode> right;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    class Variable {
+    public:
+        std::string_view name;
+        int offset;
+    };
+
 
     /**
      * Node Visitor
@@ -66,8 +109,11 @@ namespace Front {
     class NodeVisitor {
     public:
         virtual void goProgram(ProgramNode* node) {};
+        virtual void goStatement(StatementNode* node) {};
         virtual void goBinary(BinaryNode* node) {};
         virtual void goConstant(ConstantNode* node) {};
+        virtual void goVariable(VariableNode* node) {};
+        virtual void goAssign(AssignNode* node) {};
     };
 }
 

@@ -3,11 +3,11 @@
  * Time: 2023/2/27
  */
 
-#include "Lexer.h"
+#include "Diag.h"
 #include <cctype>
 
 namespace Front {
-    Position::Position(const char *source) : source(source), index(-1), x(0), y(1), currentChar('\0') {
+    Position::Position(const char *source) : source(source), index(-1), x(0), y(1), lineX(0), currentChar('\0') {
         /*
          * Read a character
          * 预读一个字符
@@ -43,11 +43,16 @@ namespace Front {
         while (isspace(this->position->currentChar)) {
             if (this->position->currentChar == '\n') {
                 this->position->y++;
+                this->position->lineX = this->position->x;
                 this->position->x = 1;
             }
             this->position->Next();
         }
 
+        /*
+         * Determines whether the current character conforms to the character specified by the grammar
+         * 判断当前字符是否符合文法规定的字符
+         */
         switch (this->position->currentChar) {
             case '\0':
                 this->MakeToken(TokenType::EOF_, "");
@@ -76,13 +81,24 @@ namespace Front {
                 this->MakeToken(TokenType::SRPAREN, ")");
                 this->position->Next();
                 break;
+            case '=':
+                this->MakeToken(TokenType::EQUAL, "=");
+                this->position->Next();
+                break;
+            case ';':
+                this->MakeToken(TokenType::SEMICOLON, ";");
+                this->position->Next();
+                break;
             default:
-                if (isdigit(this->position->currentChar)) {
+                if (this->IsDigit()) {
                     this->NumberToken();
                     break;
                 }
-                // throw
-                exit(0);
+                if (IsLetter()) {
+                    this->IdentifierToken();
+                    break;
+                }
+                DiagException(this->position, " current char '%c' is illegal");
         }
     }
 
@@ -93,11 +109,41 @@ namespace Front {
     void Lexer::NumberToken() {
         int start = this->position->index;
 
-        while (isdigit(this->position->currentChar)) {
+        while (this->IsDigit()) {
             this->position->Next();
         }
 
         this->MakeToken(TokenType::VT_NUMBER, this->position->source.substr(start, this->position->index - start));
+    }
+
+    void Lexer::IdentifierToken() {
+        int start = this->position->index;
+
+        while (this->IsLetterOrDigit()) {
+            this->position->Next();
+        }
+
+        this->MakeToken(TokenType::IDENTIFIER, this->position->source.substr(start, this->position->index - start));
+    }
+
+    bool Lexer::IsLetter() {
+        return (this->position->currentChar >= 'a' && this->position->currentChar <= 'z') || (this->position->currentChar >= 'A' && this->position->currentChar <= 'Z') || this->position->currentChar == '_';
+    }
+
+    bool Lexer::IsDigit() {
+        return std::isdigit(this->position->currentChar);
+    }
+
+    bool Lexer::IsLetterOrDigit() {
+        return this->IsLetter() || this->IsDigit();
+    }
+
+    void Lexer::ExpectToken(TokenType type) {
+        if (this->currentToken->type == type) {
+            this->Next();
+        } else {
+            DiagException(this->position, "%s expected", std::string(this->currentToken->value).data());
+        }
     }
 
 } // Front

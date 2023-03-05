@@ -1,13 +1,12 @@
-#ifndef KNIFE_TOKEN_H
-#define KNIFE_TOKEN_H
-
 /*
  * Author: Huyemt
  * Time: 2023/2/27
  */
 
+#ifndef KNIFE_TOKEN_H
+#define KNIFE_TOKEN_H
+
 #include <string_view>
-#include <string>
 
 namespace Front {
     /**
@@ -15,15 +14,20 @@ namespace Front {
      * 单元类型
      */
     enum class TokenType {
+        IDENTIFIER,
+
         /**
          * Delimiter
          * 界限符
          */
-
         //  (
         SLPAREN,
         //  )
         SRPAREN,
+        //  =
+        EQUAL,
+        //  ;
+        SEMICOLON,
         //  \0
         EOF_,
 

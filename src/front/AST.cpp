@@ -10,11 +10,23 @@ namespace Front {
         visitor->goProgram(this);
     }
 
+    void StatementNode::Accept(NodeVisitor *visitor) {
+        visitor->goStatement( this);
+    }
+
     void BinaryNode::Accept(NodeVisitor *visitor) {
         visitor->goBinary(this);
     }
 
     void ConstantNode::Accept(NodeVisitor *visitor) {
         visitor->goConstant(this);
+    }
+
+    void VariableNode::Accept(NodeVisitor *visitor) {
+        visitor->goVariable(this);
+    }
+
+    void AssignNode::Accept(NodeVisitor *visitor) {
+        visitor->goAssign(this);
     }
 }
