@@ -78,7 +78,7 @@ namespace Front {
          * 预期下一个词法单元类型，如果不符合，那么抛出错误
          * @param type
          */
-        void ExpectToken(TokenType type);
+        void ExpectToken(TokenType type, const char* value);
     private:
         /**
          * Judge whether the current character is a letter (including the underscore `_`)

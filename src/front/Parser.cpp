@@ -89,7 +89,7 @@ namespace Front {
         if (this->lexer.currentToken->type == TokenType::SLPAREN) {
             this->lexer.Next();
             auto node = this->Expression();
-            this->lexer.ExpectToken(TokenType::SRPAREN);
+            this->lexer.ExpectToken(TokenType::SRPAREN, ")");
             return node;
         }
 

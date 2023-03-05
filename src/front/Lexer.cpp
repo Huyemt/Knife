@@ -98,7 +98,7 @@ namespace Front {
                     this->IdentifierToken();
                     break;
                 }
-                DiagException(this->position, " current char '%c' is illegal");
+                DiagException(this->position, " current char \'%c\' is illegal", this->position->currentChar);
         }
     }
 
@@ -138,11 +138,11 @@ namespace Front {
         return this->IsLetter() || this->IsDigit();
     }
 
-    void Lexer::ExpectToken(TokenType type) {
+    void Lexer::ExpectToken(TokenType type, const char* value) {
         if (this->currentToken->type == type) {
             this->Next();
         } else {
-            DiagException(this->position, "%s expected", std::string(this->currentToken->value).data());
+            DiagException(this->position, " \'%s\' expected", value);
         }
     }
 
