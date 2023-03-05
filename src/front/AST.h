@@ -93,10 +93,23 @@ namespace Front {
         void Accept(NodeVisitor* visitor) override;
     };
 
+    /**
+     * Assign Node
+     * 赋值节点
+     */
     class AssignNode : public ASTNode {
     public:
         std::shared_ptr<ASTNode> left;
         std::shared_ptr<ASTNode> right;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    class IfNode : public ASTNode {
+    public:
+        std::shared_ptr<ASTNode> Condition {nullptr};
+        std::shared_ptr<ASTNode> Then {nullptr};
+        std::shared_ptr<ASTNode> Else {nullptr};
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -120,6 +133,7 @@ namespace Front {
         virtual void goConstant(ConstantNode* node) {};
         virtual void goVariable(VariableNode* node) {};
         virtual void goAssign(AssignNode* node) {};
+        virtual void goIf(IfNode* node) {};
     };
 }
 

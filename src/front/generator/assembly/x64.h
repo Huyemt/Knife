@@ -23,6 +23,7 @@ namespace Front {
         void goConstant(ConstantNode *node) override;
         void goVariable(VariableNode *node) override;
         void goAssign(AssignNode *node) override;
+        void goIf(IfNode *node) override;
 
         void Push();
         void Pop(const char* reg);

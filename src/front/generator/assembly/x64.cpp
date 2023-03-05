@@ -15,7 +15,7 @@ namespace Front {
 
         /*
          * Space allocation
-         * 空间分配
+         * 内存空间分配
          */
         int stackSize = 0;
         for (auto &v : node->variables) {
@@ -125,5 +125,24 @@ namespace Front {
     void x64::goVariable(VariableNode *node) {
         printf("\tlea %d(%%rbp), %%rax\n", node->variableObject->offset);
         printf("\tmov (%%rax), %%rax\n");
+    }
+
+    void x64::goIf(IfNode *node) {
+        node->Condition->Accept(this);
+        printf("\tcmp $0, %%rax\n");
+
+        if (node->Else) {
+            printf("\tje .L.else\n");
+        } else {
+            printf("\tje .L.end\n");
+        }
+        node->Then->Accept(this);
+        printf("\tje .L.end\n");
+
+        if (node->Else) {
+            printf(".L.else:\n");
+            node->Else->Accept(this);
+        }
+        printf(".L.end:\n");
     }
 } // Front

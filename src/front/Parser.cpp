@@ -25,10 +25,24 @@ namespace Front {
     }
 
     std::shared_ptr<ASTNode> Parser::Statement() {
-        auto node = std::make_shared<StatementNode>();
-        node->left = this->Expression();
-        this->lexer.ExpectToken(TokenType::SEMICOLON);
-        return node;
+        if (this->lexer.currentToken->type == TokenType::IF) {
+            auto node = std::make_shared<IfNode>();
+            this->lexer.Next();
+            this->lexer.ExpectToken(TokenType::SLPAREN);
+            node->Condition = this->Expression();
+            this->lexer.ExpectToken(TokenType::SRPAREN);
+            node->Then = this->Statement();
+            if (this->lexer.currentToken->type == TokenType::ELSE) {
+                this->lexer.Next();
+                node->Else = this->Statement();
+            }
+            return node;
+        } else {
+            auto node = std::make_shared<StatementNode>();
+            node->left = this->Expression();
+            this->lexer.ExpectToken(TokenType::SEMICOLON);
+            return node;
+        }
     }
 
     std::shared_ptr<ASTNode> Parser::Assgin() {

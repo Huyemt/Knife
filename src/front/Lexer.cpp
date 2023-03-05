@@ -167,7 +167,15 @@ namespace Front {
             this->position->Next();
         }
 
-        this->MakeToken(TokenType::IDENTIFIER, this->position->source.substr(start, this->position->index - start));
+        std::string_view value = this->position->source.substr(start, this->position->index - start);
+
+        if (value == "if") {
+            this->MakeToken(TokenType::IF);
+        } else if (value == "else") {
+            this->MakeToken(TokenType::ELSE);
+        } else {
+            this->MakeToken(TokenType::IDENTIFIER, value);
+        }
     }
 
     bool Lexer::IsLetter() {

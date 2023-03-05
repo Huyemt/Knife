@@ -14,6 +14,17 @@ namespace Front {
      * 单元类型
      */
     enum class TokenType {
+        /**
+         * Keyword
+         * 关键字
+         */
+        IF,
+        ELSE,
+
+        /**
+         * Identifier
+         * 标识符
+         */
         IDENTIFIER,
 
         /**
@@ -56,7 +67,6 @@ namespace Front {
         //  =<
         //  <=
         LESSER_OR_EQUAL,
-
 
 
         /**

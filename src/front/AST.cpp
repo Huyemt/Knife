@@ -29,4 +29,8 @@ namespace Front {
     void AssignNode::Accept(NodeVisitor *visitor) {
         visitor->goAssign(this);
     }
+
+    void IfNode::Accept(NodeVisitor *visitor) {
+        visitor->goIf(this);
+    }
 }
