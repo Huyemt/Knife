@@ -18,12 +18,15 @@ namespace Front {
         void goProgram(ProgramNode *node) override;
     private:
         int stackLevel {0};
+        int ifSequence {0};
+
         void goStatement(StatementNode *node) override;
         void goBinary(BinaryNode *node) override;
         void goConstant(ConstantNode *node) override;
         void goVariable(VariableNode *node) override;
         void goAssign(AssignNode *node) override;
         void goIf(IfNode *node) override;
+        void goBlock(BlockNode *node) override;
 
         void Push();
         void Pop(const char* reg);

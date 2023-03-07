@@ -33,4 +33,8 @@ namespace Front {
     void IfNode::Accept(NodeVisitor *visitor) {
         visitor->goIf(this);
     }
+
+    void BlockNode::Accept(NodeVisitor *visitor) {
+        visitor->goBlock(this);
+    }
 }

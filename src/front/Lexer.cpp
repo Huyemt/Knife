@@ -83,6 +83,14 @@ namespace Front {
                 this->MakeToken(TokenType::SRPAREN);
                 this->position->Next();
                 break;
+            case '{':
+                this->MakeToken(TokenType::BLPAREN);
+                this->position->Next();
+                break;
+            case '}':
+                this->MakeToken(TokenType::BRPAREN);
+                this->position->Next();
+                break;
             case '=':
                 switch (this->PeekChar(1)) {
                     case '=':

@@ -22,7 +22,13 @@ namespace Front {
         LESSER,
         LESSER_OR_EQUAL,
     };
-    class Variable;
+
+    class Variable {
+    public:
+        std::string_view name;
+        int offset;
+    };
+
     class NodeVisitor;
 
 
@@ -105,6 +111,10 @@ namespace Front {
         void Accept(NodeVisitor* visitor) override;
     };
 
+    /**
+     * Judgment Node
+     * 判断节点
+     */
     class IfNode : public ASTNode {
     public:
         std::shared_ptr<ASTNode> Condition {nullptr};
@@ -114,10 +124,15 @@ namespace Front {
         void Accept(NodeVisitor* visitor) override;
     };
 
-    class Variable {
+    /**
+     * Block Node
+     * 代码块节点
+     */
+    class BlockNode : public ASTNode {
     public:
-        std::string_view name;
-        int offset;
+        std::list<std::shared_ptr<ASTNode>> statements;
+
+        void Accept(NodeVisitor* visitor) override;
     };
 
 
@@ -134,6 +149,7 @@ namespace Front {
         virtual void goVariable(VariableNode* node) {};
         virtual void goAssign(AssignNode* node) {};
         virtual void goIf(IfNode* node) {};
+        virtual void goBlock(BlockNode* node) {};
     };
 }
 

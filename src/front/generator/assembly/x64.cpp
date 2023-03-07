@@ -128,21 +128,27 @@ namespace Front {
     }
 
     void x64::goIf(IfNode *node) {
+        int seq = this->ifSequence++;
         node->Condition->Accept(this);
         printf("\tcmp $0, %%rax\n");
 
         if (node->Else) {
-            printf("\tje .L.else\n");
-        } else {
-            printf("\tje .L.end\n");
+            printf("\tje .Logic.else_%d\n", seq);
         }
         node->Then->Accept(this);
-        printf("\tje .L.end\n");
+        printf("\tjmp .Logic.end_%d\n", seq);
 
         if (node->Else) {
-            printf(".L.else:\n");
+            printf(".Logic.else_%d:\n", seq);
             node->Else->Accept(this);
         }
-        printf(".L.end:\n");
+        printf(".Logic.end_%d:\n", seq);
+    }
+
+    void x64::goBlock(BlockNode *node) {
+        for (auto &s : node->statements) {
+            s->Accept(this);
+        }
     }
 } // Front
+

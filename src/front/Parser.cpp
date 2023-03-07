@@ -26,9 +26,9 @@ namespace Front {
 
     std::shared_ptr<ASTNode> Parser::Statement() {
         if (this->lexer.currentToken->type == TokenType::IF) {
-            auto node = std::make_shared<IfNode>();
             this->lexer.Next();
             this->lexer.ExpectToken(TokenType::SLPAREN);
+            auto node = std::make_shared<IfNode>();
             node->Condition = this->Expression();
             this->lexer.ExpectToken(TokenType::SRPAREN);
             node->Then = this->Statement();
@@ -36,6 +36,14 @@ namespace Front {
                 this->lexer.Next();
                 node->Else = this->Statement();
             }
+            return node;
+        } else if (this->lexer.currentToken->type == TokenType::BLPAREN) {
+            this->lexer.Next();
+            auto node = std::make_shared<BlockNode>();
+            while (this->lexer.currentToken->type != TokenType::BRPAREN) {
+                node->statements.push_back(this->Statement());
+            }
+            this->lexer.ExpectToken(TokenType::BRPAREN);
             return node;
         } else {
             auto node = std::make_shared<StatementNode>();

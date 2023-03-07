@@ -35,6 +35,10 @@ namespace Front {
         SLPAREN,
         //  )
         SRPAREN,
+        //  {
+        BLPAREN,
+        //  }
+        BRPAREN,
         //  =
         ASSIGN,
         //  ;
