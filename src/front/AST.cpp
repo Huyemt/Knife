@@ -37,4 +37,8 @@ namespace Front {
     void BlockNode::Accept(NodeVisitor *visitor) {
         visitor->goBlock(this);
     }
+
+    void WhileNode::Accept(NodeVisitor *visitor) {
+        visitor->goWhile(this);
+    }
 }

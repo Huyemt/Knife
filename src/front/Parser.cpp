@@ -37,7 +37,23 @@ namespace Front {
                 node->Else = this->Statement();
             }
             return node;
-        } else if (this->lexer.currentToken->type == TokenType::BLPAREN) {
+        }
+
+        if (this->lexer.currentToken->type == TokenType::WHILE) {
+            this->lexer.Next();
+            this->lexer.ExpectToken(TokenType::SLPAREN);
+            auto node = std::make_shared<WhileNode>();
+            node->Condition = this->Expression();
+            this->lexer.ExpectToken(TokenType::SRPAREN);
+            node->Then = this->Statement();
+            if (this->lexer.currentToken->type == TokenType::ELSE) {
+                this->lexer.Next();
+                node->Else = this->Statement();
+            }
+            return node;
+        }
+
+        if (this->lexer.currentToken->type == TokenType::BLPAREN) {
             this->lexer.Next();
             auto node = std::make_shared<BlockNode>();
             while (this->lexer.currentToken->type != TokenType::BRPAREN) {
@@ -45,12 +61,14 @@ namespace Front {
             }
             this->lexer.ExpectToken(TokenType::BRPAREN);
             return node;
-        } else {
-            auto node = std::make_shared<StatementNode>();
-            node->left = this->Expression();
-            this->lexer.ExpectToken(TokenType::SEMICOLON);
-            return node;
         }
+
+        auto node = std::make_shared<StatementNode>();
+        if (this->lexer.currentToken->type != TokenType::SEMICOLON) {
+            node->left = this->Expression();
+        }
+        this->lexer.ExpectToken(TokenType::SEMICOLON);
+        return node;
     }
 
     std::shared_ptr<ASTNode> Parser::Assgin() {

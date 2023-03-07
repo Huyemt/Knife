@@ -179,11 +179,20 @@ namespace Front {
 
         if (value == "if") {
             this->MakeToken(TokenType::IF);
-        } else if (value == "else") {
-            this->MakeToken(TokenType::ELSE);
-        } else {
-            this->MakeToken(TokenType::IDENTIFIER, value);
+            return;
         }
+
+        if (value == "else") {
+            this->MakeToken(TokenType::ELSE);
+            return;
+        }
+
+        if (value == "while") {
+            this->MakeToken(TokenType::WHILE);
+            return;
+        }
+
+        this->MakeToken(TokenType::IDENTIFIER, value);
     }
 
     bool Lexer::IsLetter() {

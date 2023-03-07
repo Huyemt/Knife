@@ -20,6 +20,7 @@ namespace Front {
          */
         IF,
         ELSE,
+        WHILE,
 
         /**
          * Identifier

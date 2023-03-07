@@ -109,7 +109,9 @@ namespace Front {
     }
 
     void x64::goStatement(StatementNode *node) {
-        node->left->Accept(this);
+        if (node->left) {
+            node->left->Accept(this);
+        }
     }
 
     void x64::goAssign(AssignNode *node) {
@@ -128,13 +130,14 @@ namespace Front {
     }
 
     void x64::goIf(IfNode *node) {
-        int seq = this->ifSequence++;
+        int seq = this->IfSequence++;
         node->Condition->Accept(this);
         printf("\tcmp $0, %%rax\n");
 
         if (node->Else) {
             printf("\tje .Logic.else_%d\n", seq);
         }
+
         node->Then->Accept(this);
         printf("\tjmp .Logic.end_%d\n", seq);
 
@@ -142,12 +145,33 @@ namespace Front {
             printf(".Logic.else_%d:\n", seq);
             node->Else->Accept(this);
         }
+
         printf(".Logic.end_%d:\n", seq);
     }
 
     void x64::goBlock(BlockNode *node) {
         for (auto &s : node->statements) {
             s->Accept(this);
+        }
+    }
+
+    void x64::goWhile(WhileNode *node) {
+        int seq = this->LoopSequence++;
+        printf(".Loop.begin_%d:\n", seq);
+
+        node->Condition->Accept(this);
+
+        printf("\tcmp $0, %%rax\n");
+        printf("\tje .Loop.end_%d\n", seq);
+
+        node->Then->Accept(this);
+
+        printf("\tjmp .Loop.begin_%d\n", seq);
+
+        printf(".Loop.end_%d:\n", seq);
+
+        if (node->Else) {
+            node->Else->Accept(this);
         }
     }
 } // Front

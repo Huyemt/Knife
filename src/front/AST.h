@@ -59,7 +59,7 @@ namespace Front {
      */
     class StatementNode : public ASTNode {
     public:
-        std::shared_ptr<ASTNode> left;
+        std::shared_ptr<ASTNode> left {nullptr};
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -112,6 +112,17 @@ namespace Front {
     };
 
     /**
+     * Block Node
+     * 代码块节点
+     */
+    class BlockNode : public ASTNode {
+    public:
+        std::list<std::shared_ptr<ASTNode>> statements;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    /**
      * Judgment Node
      * 判断节点
      */
@@ -125,16 +136,17 @@ namespace Front {
     };
 
     /**
-     * Block Node
-     * 代码块节点
+     * While Node
+     * While循环节点
      */
-    class BlockNode : public ASTNode {
+    class WhileNode : public ASTNode {
     public:
-        std::list<std::shared_ptr<ASTNode>> statements;
+        std::shared_ptr<ASTNode> Condition {nullptr};
+        std::shared_ptr<ASTNode> Then {nullptr};
+        std::shared_ptr<ASTNode> Else {nullptr};
 
         void Accept(NodeVisitor* visitor) override;
     };
-
 
     /**
      * Node Visitor
@@ -148,8 +160,9 @@ namespace Front {
         virtual void goConstant(ConstantNode* node) {};
         virtual void goVariable(VariableNode* node) {};
         virtual void goAssign(AssignNode* node) {};
-        virtual void goIf(IfNode* node) {};
         virtual void goBlock(BlockNode* node) {};
+        virtual void goIf(IfNode* node) {};
+        virtual void goWhile(WhileNode* node) {};
     };
 }
 
