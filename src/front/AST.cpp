@@ -41,4 +41,20 @@ namespace Front {
     void WhileNode::Accept(NodeVisitor *visitor) {
         visitor->goWhile(this);
     }
+
+    void ForNode::Accept(NodeVisitor *visitor) {
+        visitor->goFor(this);
+    }
+
+    void FunctionNode::Accept(NodeVisitor *visitor) {
+        visitor->goFunction(this);
+    }
+
+    void FunctionCallNode::Accept(NodeVisitor *visitor) {
+        visitor->goFunctionCall(this);
+    }
+
+    void FunctionReturnNode::Accept(NodeVisitor *visitor) {
+        visitor->goFunctionReturn(this);
+    }
 }

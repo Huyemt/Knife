@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <list>
+#include <vector>
 
 namespace Front {
     enum class BinaryOperator {
@@ -25,8 +26,8 @@ namespace Front {
 
     class Variable {
     public:
-        std::string_view name;
-        int offset;
+        std::string_view Name;
+        int Offset;
     };
 
     class NodeVisitor;
@@ -47,8 +48,7 @@ namespace Front {
      */
     class ProgramNode : public ASTNode {
     public:
-        std::list<std::shared_ptr<ASTNode>> statements;
-        std::list<std::shared_ptr<Variable>> variables;
+        std::list<std::shared_ptr<ASTNode>> Functions;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -59,7 +59,7 @@ namespace Front {
      */
     class StatementNode : public ASTNode {
     public:
-        std::shared_ptr<ASTNode> left {nullptr};
+        std::shared_ptr<ASTNode> Left {nullptr};
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -71,8 +71,8 @@ namespace Front {
     class BinaryNode : public ASTNode {
     public:
         BinaryOperator anOperator;
-        std::shared_ptr<ASTNode> left;
-        std::shared_ptr<ASTNode> right;
+        std::shared_ptr<ASTNode> Left;
+        std::shared_ptr<ASTNode> Right;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -83,7 +83,7 @@ namespace Front {
      */
     class ConstantNode : public ASTNode {
     public:
-        int value{0};
+        int Value {0};
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -94,7 +94,7 @@ namespace Front {
      */
     class VariableNode : public ASTNode {
     public:
-        std::shared_ptr<Variable> variableObject;
+        std::shared_ptr<Variable> VariableObject;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -105,8 +105,8 @@ namespace Front {
      */
     class AssignNode : public ASTNode {
     public:
-        std::shared_ptr<ASTNode> left;
-        std::shared_ptr<ASTNode> right;
+        std::shared_ptr<ASTNode> Left;
+        std::shared_ptr<ASTNode> Right;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -117,7 +117,7 @@ namespace Front {
      */
     class BlockNode : public ASTNode {
     public:
-        std::list<std::shared_ptr<ASTNode>> statements;
+        std::list<std::shared_ptr<ASTNode>> Statements;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -149,20 +149,72 @@ namespace Front {
     };
 
     /**
+     * For Node
+     * For循环节点
+     */
+    class ForNode : public ASTNode {
+    public:
+        std::shared_ptr<ASTNode> Init {nullptr};
+        std::shared_ptr<ASTNode> Condition {nullptr};
+        std::shared_ptr<ASTNode> Operate {nullptr};
+        std::shared_ptr<ASTNode> Then {nullptr};
+        std::shared_ptr<ASTNode> Else {nullptr};
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    /**
+     * Function Node
+     * 函数声明节点
+     */
+    class FunctionNode : public ASTNode {
+    public:
+        std::string_view Name;
+        std::vector<std::shared_ptr<Variable>> Params {};
+        std::list<std::shared_ptr<Variable>> Variables {};
+        std::list<std::shared_ptr<ASTNode>> Statements {};
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    class FunctionReturnNode : public ASTNode {
+    public:
+        std::shared_ptr<ASTNode> Left;
+
+        void Accept(NodeVisitor *visitor) override;
+    };
+
+    /**
+     * Function Call Node
+     * 函数调用节点
+     */
+    class FunctionCallNode : public ASTNode {
+    public:
+        std::string_view Name;
+        std::vector<std::shared_ptr<ASTNode>> Params {};
+
+        void Accept(NodeVisitor *visitor) override;
+    };
+
+    /**
      * Node Visitor
      * 节点访问器
      */
     class NodeVisitor {
     public:
-        virtual void goProgram(ProgramNode* node) {};
-        virtual void goStatement(StatementNode* node) {};
-        virtual void goBinary(BinaryNode* node) {};
-        virtual void goConstant(ConstantNode* node) {};
-        virtual void goVariable(VariableNode* node) {};
-        virtual void goAssign(AssignNode* node) {};
-        virtual void goBlock(BlockNode* node) {};
-        virtual void goIf(IfNode* node) {};
-        virtual void goWhile(WhileNode* node) {};
+        virtual void goProgram(ProgramNode* node) = 0;
+        virtual void goStatement(StatementNode* node) = 0;
+        virtual void goBinary(BinaryNode* node) = 0;
+        virtual void goConstant(ConstantNode* node) = 0;
+        virtual void goVariable(VariableNode* node) = 0;
+        virtual void goAssign(AssignNode* node) = 0;
+        virtual void goBlock(BlockNode* node) = 0;
+        virtual void goIf(IfNode* node) = 0;
+        virtual void goWhile(WhileNode* node) = 0;
+        virtual void goFor(ForNode* node) = 0;
+        virtual void goFunction(FunctionNode* node) = 0;
+        virtual void goFunctionReturn(FunctionReturnNode* node) = 0;
+        virtual void goFunctionCall(FunctionCallNode* node) = 0;
     };
 }
 

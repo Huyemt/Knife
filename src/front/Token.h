@@ -21,6 +21,8 @@ namespace Front {
         IF,
         ELSE,
         WHILE,
+        FOR,
+        RETURN,
 
         /**
          * Identifier
@@ -42,6 +44,8 @@ namespace Front {
         BRPAREN,
         //  =
         ASSIGN,
+        //  ,
+        COMMA,
         //  ;
         SEMICOLON,
         //  \0

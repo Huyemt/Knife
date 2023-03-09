@@ -21,37 +21,32 @@ namespace Front {
          * Code
          * 代码
          */
-        std::string_view source;
-
+        std::string_view Source;
         /**
-         * Reading index
+         * Reading Index
          * 读取到的索引
          */
-        int index;
-
+        int Index;
         /**
          * Horizontal coordinate
          * 横坐标
          */
         int x;
-
         /**
          * Vertical coordinate
          * 纵坐标
          */
         int y;
-
         /**
          * Front-of-line coordinate
          * 行开头坐标
          */
-         int lineX;
-
+         int LineX;
         /**
          * The character currently read
          * 当前读取到的字符
          */
-        char currentChar;
+        char CurrentChar;
 
         explicit Position(const char* source);
         void Next();
@@ -63,8 +58,10 @@ namespace Front {
      */
     class Lexer {
     public:
-        std::shared_ptr<Token> currentToken;
+        std::shared_ptr<Token> CurrentToken;
+        std::shared_ptr<Token> CurrentPeekToken;
         std::shared_ptr<Position> position;
+        std::shared_ptr<Position> peekPosition;
 
         explicit Lexer(const char* code);
         /**
@@ -72,13 +69,14 @@ namespace Front {
          * 读取下一个词法单元
          */
         void Next();
-
         /**
          * Expect the next lexical unit type, and throw an error if it does not match
          * 预期下一个词法单元类型，如果不符合，那么抛出错误
          * @param type
          */
         void ExpectToken(TokenType type);
+        void BeginPeekToken();
+        void EndPeekToken();
     private:
         /**
          * Judge whether the current character is a letter (including the underscore `_`)
@@ -99,7 +97,7 @@ namespace Front {
          */
         bool IsLetterOrDigit();
         /**
-         * Gets the tag value of a lexical unit
+         * Gets the tag Value of a lexical unit
          * 获取词法单元的标记值
          * @param type
          * @return string

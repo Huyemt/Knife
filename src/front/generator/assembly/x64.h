@@ -20,6 +20,15 @@ namespace Front {
         int stackLevel {0};
         int IfSequence {0};
         int LoopSequence {0};
+        const char* RegX64[6] = {
+                "%rdi",
+                "%rsi",
+                "%rdx",
+                "%rcx",
+                "%r8",
+                "%r9"
+        };
+        std::string CurrentFunctionName;
 
         void goStatement(StatementNode *node) override;
         void goBinary(BinaryNode *node) override;
@@ -29,9 +38,14 @@ namespace Front {
         void goBlock(BlockNode *node) override;
         void goIf(IfNode *node) override;
         void goWhile(WhileNode *node) override;
+        void goFor(ForNode *node) override;
+        void goFunction(FunctionNode *node) override;
+        void goFunctionReturn(FunctionReturnNode *node) override;
+        void goFunctionCall(FunctionCallNode *node) override;
 
         void Push();
         void Pop(const char* reg);
+        int AlignTo(int size, int align);
     };
 
 } // Front

@@ -21,6 +21,8 @@ namespace Front {
         explicit Parser(Lexer& lexer);
         std::shared_ptr<ProgramNode> Parse();
     private:
+        std::shared_ptr<ASTNode> Function();
+        std::shared_ptr<ASTNode> FunctionCall();
         std::shared_ptr<ASTNode> Statement();
         std::shared_ptr<ASTNode> Assgin();
         std::shared_ptr<ASTNode> Equal();

@@ -29,7 +29,18 @@ int main(int argc, char* argv[]) {
         std::cout << R"(Please input code -> .\knife "expression")" << std::endl;
         return 0;
     }
-    compileAsm(argv[1]);
+
+    FILE* fp = fopen(argv[1], "r");
+    if (fp == nullptr) {
+        std::cout << "This file is not exist: " << argv[1] << std::endl;
+        exit(0);
+    }
+
+    char buffer[1024 * 10];
+    size_t length = fread(buffer, 1, sizeof(buffer), fp);
+    buffer[length] = '\0';
+
+    compileAsm(buffer);
     return 0;
 
 }

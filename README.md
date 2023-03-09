@@ -7,8 +7,8 @@
 由于目前技术尚不成熟，所以导致`Knife`在早期属于编译型语言。编写完程序后会通过链接器将生成的代码链接为系统可执行文件，以方便运行。
 ## 支持的系统
 - [x] Linux
-- [x] MacOS
-- [ ] Windows（正在努力实现）
+- [ ] MacOS（正在努力实现）
+- [x] Windows
 ## 开发环境
  - CLion
  - LLVM - Clang compiler
