@@ -191,7 +191,7 @@ namespace Front {
     class FunctionCallNode : public ASTNode {
     public:
         std::string_view Name;
-        std::vector<std::shared_ptr<ASTNode>> Params {};
+        std::vector<std::shared_ptr<ASTNode>> Params;
 
         void Accept(NodeVisitor *visitor) override;
     };

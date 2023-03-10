@@ -10,6 +10,7 @@
 namespace Front {
     void x64::goProgram(ProgramNode *node) {
         printf(".text\n");
+
         for (auto &f : node->Functions) {
             f->Accept(this);
         }
@@ -65,7 +66,8 @@ namespace Front {
             this->Pop(this->RegX64[i]);
         }
 
-        printf("\tcall %s\n", std::string(node->Name).data());
+        std::string name = std::string(node->Name);
+        printf("\tcall %s\n", name.data());
     }
 
     void x64::goBinary(BinaryNode *node) {
@@ -171,6 +173,8 @@ namespace Front {
 
         if (node->Else) {
             printf("\tje .Logic.else_%d\n", seq);
+        } else {
+            printf("\tje .Logic.end_%d\n", seq);
         }
 
         node->Then->Accept(this);
