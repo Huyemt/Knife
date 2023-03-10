@@ -13,7 +13,9 @@ namespace Front {
         va_list ap;
         va_start(ap, fmt);
 
-        std::cout << position->Source.substr(position->LineX, position->x).data() << std::endl;
+        std::string wrong = position->Source.substr(position->LineX).data();
+
+        std::cout << wrong.substr(0, wrong.rfind('\n'))<< std::endl;
         fprintf(stderr, "%*s^ ", position->x-1, "");
         fprintf(stderr, "at line %d,column %d: ", position->y, position->x);
         vfprintf(stderr, fmt, ap);

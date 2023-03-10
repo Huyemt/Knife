@@ -46,7 +46,7 @@ namespace Front {
         while (isspace(this->position->CurrentChar)) {
             if (this->position->CurrentChar == '\n') {
                 this->position->y++;
-                this->position->LineX = this->position->x;
+                this->position->LineX = this->position->Index;
                 this->position->x = 1;
             }
             this->position->Next();
