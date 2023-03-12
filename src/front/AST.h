@@ -23,14 +23,20 @@ namespace Front {
         LESSER,
         LESSER_OR_EQUAL,
     };
+    class NodeVisitor;
+    class Type;
 
     class Variable {
     public:
         std::string_view Name;
         int Offset;
+        std::shared_ptr<Type> Base;
     };
 
-    class NodeVisitor;
+    enum class UnaryOperator {
+        PLUS,
+        MINUS
+    };
 
 
     /**
@@ -39,6 +45,9 @@ namespace Front {
      */
     class ASTNode {
     public:
+        std::shared_ptr<Type> Base;
+
+        virtual ~ASTNode() {};
         virtual void Accept(NodeVisitor* visitor) {};
     };
 
@@ -60,6 +69,14 @@ namespace Front {
     class StatementNode : public ASTNode {
     public:
         std::shared_ptr<ASTNode> Left {nullptr};
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    class UnaryNode : public ASTNode {
+    public:
+        UnaryOperator anOperator;
+        std::shared_ptr<ASTNode> Left;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -107,6 +124,17 @@ namespace Front {
     public:
         std::shared_ptr<ASTNode> Left;
         std::shared_ptr<ASTNode> Right;
+
+        void Accept(NodeVisitor* visitor) override;
+    };
+
+    /**
+     * Declaration Node
+     * 声明语句
+     */
+    class DeclarationNode : public ASTNode {
+    public:
+        std::list<std::shared_ptr<AssignNode>> Assigns;
 
         void Accept(NodeVisitor* visitor) override;
     };
@@ -170,13 +198,17 @@ namespace Front {
     class FunctionNode : public ASTNode {
     public:
         std::string_view Name;
-        std::vector<std::shared_ptr<Variable>> Params {};
+        std::list<std::shared_ptr<Variable>> Params {};
         std::list<std::shared_ptr<Variable>> Variables {};
         std::list<std::shared_ptr<ASTNode>> Statements {};
 
         void Accept(NodeVisitor* visitor) override;
     };
 
+    /**
+     * Function Return Node
+     * 函数返回节点
+     */
     class FunctionReturnNode : public ASTNode {
     public:
         std::shared_ptr<ASTNode> Left;
@@ -196,6 +228,13 @@ namespace Front {
         void Accept(NodeVisitor *visitor) override;
     };
 
+    class StatementExperssionNode : public ASTNode {
+    public:
+        std::vector<std::shared_ptr<ASTNode>> Statements;
+
+        void Accept(NodeVisitor *visitor) override;
+    };
+
     /**
      * Node Visitor
      * 节点访问器
@@ -204,10 +243,13 @@ namespace Front {
     public:
         virtual void goProgram(ProgramNode* node) = 0;
         virtual void goStatement(StatementNode* node) = 0;
+        virtual void goStatementExperssion(StatementExperssionNode* node) = 0;
+        virtual void goUnary(UnaryNode* node) = 0;
         virtual void goBinary(BinaryNode* node) = 0;
         virtual void goConstant(ConstantNode* node) = 0;
         virtual void goVariable(VariableNode* node) = 0;
         virtual void goAssign(AssignNode* node) = 0;
+        virtual void goDeclaration(DeclarationNode* node) = 0;
         virtual void goBlock(BlockNode* node) = 0;
         virtual void goIf(IfNode* node) = 0;
         virtual void goWhile(WhileNode* node) = 0;

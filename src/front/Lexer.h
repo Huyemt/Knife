@@ -70,7 +70,7 @@ namespace Front {
          */
         void Next();
         /**
-         * Expect the next lexical unit type, and throw an error if it does not match
+         * Expect the next lexical unit Base, and throw an error if it does not match
          * 预期下一个词法单元类型，如果不符合，那么抛出错误
          * @param type
          */
@@ -103,6 +103,8 @@ namespace Front {
          * @return string
          */
         static const char* GetSpelling(TokenType type);
+        void SkipSpace();
+        void SkipComment();
         char PeekChar(int count);
 
         void MakeToken(TokenType type, std::string_view value);

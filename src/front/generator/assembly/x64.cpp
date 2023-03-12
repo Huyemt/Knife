@@ -31,14 +31,15 @@ namespace Front {
             v->Offset = -stackSize;
         }
 
-        stackSize = this->AlignTo(stackSize, 16);
+        stackSize = x64::AlignTo(stackSize, 16);
 
         printf("\tpush %%rbp\n");
         printf("\tmov %%rsp, %%rbp\n");
         printf("\tsub $%d, %%rsp\n", stackSize);
 
-        for (int i = 0; i < node->Params.size(); ++i) {
-            printf("\tmov %s, %d(%%rbp)\n", RegX64[i], node->Params[i]->Offset);
+        int i = 0;
+        for (auto &p : node->Params) {
+            printf("\tmov %s, %d(%%rbp)\n", RegX64[i], p->Offset);
         }
 
         for (auto &s : node->Statements) {
@@ -238,6 +239,32 @@ namespace Front {
 
         if (node->Else) {
             node->Else->Accept(this);
+        }
+    }
+
+    void x64::goDeclaration(DeclarationNode *node) {
+        for (auto &n : node->Assigns) {
+            n->Accept(this);
+        }
+    }
+
+    void x64::goStatementExperssion(StatementExperssionNode *node) {
+        for (auto &s : node->Statements) {
+            node->Accept(this);
+        }
+    }
+
+    void x64::goUnary(UnaryNode *node) {
+        switch (node->anOperator) {
+            case UnaryOperator::PLUS: {
+                node->Accept(this);
+                break;
+            }
+            case UnaryOperator::MINUS: {
+                node->Left->Accept(this);
+                printf("\tneg %%rax\n");
+                break;
+            }
         }
     }
 } // Front

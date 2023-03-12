@@ -31,10 +31,13 @@ namespace Front {
         std::string CurrentFunctionName;
 
         void goStatement(StatementNode *node) override;
+        void goStatementExperssion(StatementExperssionNode *node) override;
+        void goUnary(UnaryNode *node) override;
         void goBinary(BinaryNode *node) override;
         void goConstant(ConstantNode *node) override;
         void goVariable(VariableNode *node) override;
         void goAssign(AssignNode *node) override;
+        void goDeclaration(DeclarationNode *node) override;
         void goBlock(BlockNode *node) override;
         void goIf(IfNode *node) override;
         void goWhile(WhileNode *node) override;
@@ -45,7 +48,7 @@ namespace Front {
 
         void Push();
         void Pop(const char* reg);
-        int AlignTo(int size, int align);
+        static int AlignTo(int size, int align);
     };
 
 } // Front

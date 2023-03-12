@@ -4,6 +4,7 @@
  */
 
 #include "front/Parser.h"
+#include "Type.h"
 #include "front/generator/assembly/x64.h"
 #include <iostream>
 

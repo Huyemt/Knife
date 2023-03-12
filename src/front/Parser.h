@@ -30,10 +30,18 @@ namespace Front {
         std::shared_ptr<ASTNode> Expression();
         std::shared_ptr<ASTNode> Term();
         std::shared_ptr<ASTNode> Factor();
+        std::shared_ptr<ASTNode> Unary();
         std::shared_ptr<ASTNode> Primary();
 
+        std::shared_ptr<Type> DeclarationSpec();
+        std::shared_ptr<Type> Declarator(const std::shared_ptr<Type>& base, std::shared_ptr<Token> &token);
+        std::shared_ptr<Type> TypeSuffix(const std::shared_ptr<Type>& base);
+
+        bool IsTypeName();
+
         std::shared_ptr<Variable> FindVariable(std::string_view name);
-        std::shared_ptr<Variable> MakeVariable(std::string_view name);
+        std::shared_ptr<Variable> MakeVariable(std::string_view name, std::shared_ptr<Type> ty);
+        std::shared_ptr<ASTNode> MakeNodeVariable(const std::shared_ptr<Variable>& variable);
     };
 
 } // Front

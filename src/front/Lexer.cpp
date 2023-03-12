@@ -46,7 +46,7 @@ namespace Front {
         while (isspace(this->position->CurrentChar)) {
             if (this->position->CurrentChar == '\n') {
                 this->position->y++;
-                this->position->LineX = this->position->Index;
+                this->position->LineX = this->position->Index + 1;
                 this->position->x = 1;
             }
             this->position->Next();
@@ -69,11 +69,11 @@ namespace Front {
                 this->position->Next();
                 break;
             case '*':
-                this->MakeToken(TokenType::MUL);
+                this->MakeToken(TokenType::STAR);
                 this->position->Next();
                 break;
             case '/':
-                this->MakeToken(TokenType::DIV);
+                this->MakeToken(TokenType::SLASH);
                 this->position->Next();
                 break;
             case '(':
@@ -207,6 +207,11 @@ namespace Front {
             return;
         }
 
+        if (value == "int") {
+            this->MakeToken(TokenType::VT_NUMBER);
+            return;
+        }
+
         this->MakeToken(TokenType::IDENTIFIER, value);
     }
 
@@ -236,9 +241,9 @@ namespace Front {
                 return "+";
             case TokenType::MINUS:
                 return "-";
-            case TokenType::MUL:
+            case TokenType::STAR:
                 return "*";
-            case TokenType::DIV:
+            case TokenType::SLASH:
                 return "-";
             case TokenType::SLPAREN:
                 return "(";

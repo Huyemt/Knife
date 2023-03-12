@@ -13,9 +13,13 @@ namespace Front {
         va_list ap;
         va_start(ap, fmt);
 
-        std::string wrong = position->Source.substr(position->LineX).data();
+        int i = position->LineX;
+        while (position->Source[i] != '\n') {
+            fprintf(stderr, "%c", position->Source[i]);
+            i++;
+        }
 
-        std::cout << wrong.substr(0, wrong.rfind('\n'))<< std::endl;
+        fprintf(stderr, "\n");
         fprintf(stderr, "%*s^ ", position->x-1, "");
         fprintf(stderr, "at line %d,column %d: ", position->y, position->x);
         vfprintf(stderr, fmt, ap);

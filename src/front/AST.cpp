@@ -57,4 +57,16 @@ namespace Front {
     void FunctionReturnNode::Accept(NodeVisitor *visitor) {
         visitor->goFunctionReturn(this);
     }
+
+    void DeclarationNode::Accept(NodeVisitor *visitor) {
+        visitor->goDeclaration(this);
+    }
+
+    void StatementExperssionNode::Accept(NodeVisitor *visitor) {
+        visitor->goStatementExperssion(this);
+    }
+
+    void UnaryNode::Accept(NodeVisitor *visitor) {
+        visitor->goUnary(this);
+    }
 }

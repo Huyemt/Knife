@@ -10,7 +10,7 @@
 
 namespace Front {
     /**
-     * The type of tokens
+     * The Base of tokens
      * 单元类型
      */
     enum class TokenType {
@@ -38,6 +38,10 @@ namespace Front {
         SLPAREN,
         //  )
         SRPAREN,
+        //  [
+        MLPAREN,
+        //  ]
+        MRPAREN,
         //  {
         BLPAREN,
         //  }
@@ -60,9 +64,9 @@ namespace Front {
         //  -
         MINUS,
         //  *
-        MUL,
+        STAR,
         //  /
-        DIV,
+        SLASH,
         //  ==
         EQUAL,
         //  !=
@@ -85,7 +89,6 @@ namespace Front {
         VT_NUMBER,
 
     };
-
 
     /**
      * 词法单元
